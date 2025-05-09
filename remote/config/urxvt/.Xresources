@@ -1,0 +1,7 @@
+URxvt*font:  xft:Hack Nerd Font Mono:pixelsize=13
+Urxvt*depth: 32
+URxvt*transparent: true
+URxvt*tintColor: White
+URxvt*shading: 150
+URxvt*foreground: Black
+URxvt*background: White

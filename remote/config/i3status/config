@@ -1,0 +1,39 @@
+general {
+colors = true
+interval = 1
+}
+
+order += "volume master"
+order += "disk /"
+order += "ethernet br0"
+order += "load"
+order += "tztime local"
+
+volume master {
+        format = "♪: %volume"
+        format_muted = "♪: muted (%volume)"
+        device = "default"
+        mixer = "Master"
+        mixer_idx = 0
+}
+
+disk "/" {
+        format = "%avail"
+}
+
+ethernet br0 {
+	format_up = "E: %ip (%speed)"
+	format_down = "E: down"
+}
+
+load {
+        format = "%1min"
+}
+
+tztime local {
+        format = "%Y-%m-%d %H:%M:%S"
+}
+
+run_watch DHCP {
+	pidfile = "/var/run/dhclient*.pid"
+}
