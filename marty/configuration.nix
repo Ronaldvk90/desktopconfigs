@@ -6,6 +6,11 @@
 
 {
 
+  # Enable the gnome-keyring secrets vault. 
+  # Will be exposed through DBus to programs willing to store secrets.
+  services.gnome.gnome-keyring.enable = true;
+  security.pam.services.login.enableGnomeKeyring = true;
+
   programs.sway = {
     enable = true;
     wrapperFeatures.gtk = true;
@@ -36,7 +41,20 @@
 
   programs.light.enable = true;
 
+  programs._1password.enable = true;
+  programs._1password-gui = {
+    enable = true;
+    # Certain features, including CLI integration and system authentication support,
+    # require enabling PolKit integration on some desktop environments (e.g. Plasma).
+    polkitPolicyOwners = [ "ronald" ];
+  };
+
   programs.zsh.enable = true;
+
+  virtualisation.podman = {
+    enable = true;
+  };
+
   virtualisation.docker = {
     enable = true;
     daemon.settings.features.containerd-snapshotter = true;
@@ -118,7 +136,27 @@
   # Select internationalisation properties.
   i18n.defaultLocale = "en_US.UTF-8";
 
-# Enable sound with pipewire.
+  fonts = {
+    packages = with pkgs; [
+      noto-fonts
+      noto-fonts-cjk-sans
+      noto-fonts-emoji
+      font-awesome
+      source-han-sans
+    ];
+    fontconfig.defaultFonts = {
+      serif = [ "Noto Serif" "Source Han Serif" ];
+      sansSerif = [ "Noto Sans" "Source Han Sans" ];
+    };
+  };
+ 
+  security.pam.services.swaylock = {};
+  security.pam.loginLimits = [
+  { domain = "@users"; item = "rtprio"; type = "-"; value = 1; }
+  ];
+
+ 
+  # Enable sound with pipewire.
   hardware.pulseaudio.enable = false;
   security.rtkit.enable = true;
   services.pipewire = {
@@ -126,7 +164,7 @@
     alsa.enable = true;
     alsa.support32Bit = true;
     pulse.enable = true;
-};
+  };
 
   # Configure keymap in X11
   services.xserver.xkb = {
@@ -155,7 +193,7 @@
   slurp # screenshot functionality
   wl-clipboard # wl-copy and wl-paste for copy/paste from stdin / stdout
   mako # notification system developed by swaywm maintainer
-  waybar
+  minicom
   avahi
   killall
   playerctl
@@ -174,7 +212,6 @@
   wget
   git
   remmina
-  gnumake
   wineWowPackages.stable
   winetricks
   gparted
@@ -183,12 +220,12 @@
   qemu
   docker
   docker-buildx
-  gtk3
-  python3Full
   libreoffice
   signal-desktop
   gzdoom
   ntfs3g
+  distrobox
+  spotify
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
