@@ -48,6 +48,12 @@
     options = [ "credentials=/root/.ronald" "x-systemd.automount" "auto" "uid=1000" "gid=100" "file_mode=0700" "dir_mode=0700" ];
   };
 
+  fileSystems."/home/ronald/.local/share/Steam/steamapps/common/Total\ Annihilation/SAVEGAME" = {
+    device = "//10.10.10.3/savegames";
+    fsType = "cifs";
+    options = [ "credentials=/root/.ronald" "x-systemd.automount" "auto" "uid=1000" "gid=100" "file_mode=0700" "dir_mode=0700" ];
+  };
+
   swapDevices = [ ];
 
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking

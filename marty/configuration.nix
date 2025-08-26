@@ -63,7 +63,6 @@
   virtualisation.libvirtd.enable = true;
   programs.virt-manager.enable = true;
   security.sudo.wheelNeedsPassword = false;
-  services.printing.enable = true;
   services.flatpak.enable = true;
   
   xdg.portal = {
@@ -84,7 +83,15 @@
     defaultEditor = true;
   };
 
-  services.avahi.enable = true;
+  services.printing = {
+    enable = true;
+    drivers = [ pkgs.cnijfilter2 ];
+  };
+
+  services.avahi = {
+    enable = true;
+    nssmdns4 = true;
+  };
 
   hardware.bluetooth.enable = false; # enables support for Bluetooth
   hardware.bluetooth.powerOnBoot = false; # powers up the default Bluetooth controller on boot
@@ -116,20 +123,8 @@
   # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
   # Enable networking
-  networking.networkmanager.enable = false;
-  networking.useDHCP = false;
-  networking.bridges = {
-    "br0" = {
-      interfaces = [ "enp3s0" ];
-    };
-  };
-  networking.interfaces.br0.ipv4.addresses = [ {
-    address = "10.10.10.4";
-    prefixLength = 24;
-  } ];
-  networking.defaultGateway = "10.10.10.1";
-  networking.nameservers = ["10.10.10.1"];
-
+  networking.networkmanager.enable = true;
+  
   # Set your time zone.
   time.timeZone = "Europe/Amsterdam";
 
@@ -177,7 +172,7 @@
     shell = pkgs.zsh;
     isNormalUser = true;
     description = "Ronald van Kouwen";
-    extraGroups = [ "wheel" "docker" "libvirtd" "dialout" "scanner" "lp" ];
+    extraGroups = [ "wheel" "docker" "libvirtd" "dialout" "scanner" "lp" "networkmanager" ];
     packages = with pkgs; [];
   };
 
@@ -226,6 +221,15 @@
   ntfs3g
   distrobox
   spotify
+  smartmontools
+  p7zip
+  file
+  wireshark
+  inetutils
+  filezilla
+  dhcpcd
+  exfat
+  dialog
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
